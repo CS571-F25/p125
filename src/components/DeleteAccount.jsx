@@ -89,6 +89,10 @@ export default function DeleteAccount({ user }) {
       // User will be automatically logged out after account deletion
     } catch (error) {
       console.error("Error deleting account:", error);
+      // Check if error requires recent login
+      if (error.code === 'auth/requires-recent-login') {
+        throw error; // Re-throw to be caught by handleDeleteAccount
+      }
       setError(`Failed to delete account: ${error.message}`);
       setDeleting(false);
     }
